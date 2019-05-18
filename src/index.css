@@ -1,0 +1,12 @@
+body {
+  padding: 10px;
+  font-family: Helvetica, Ubuntu, Arial, sans-serif;
+}
+h1 {
+  font-size: 2em;
+}
+a {
+  display: block;
+  white-space: nowrap;
+  line-height: 1.5em;
+}
