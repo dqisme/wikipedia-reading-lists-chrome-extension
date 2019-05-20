@@ -1,4 +1,3 @@
-/*global chrome*/
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 
@@ -34,7 +33,7 @@ const App: React.FC = () => {
   return (
     <div>
       {allEntries.map(entry => (
-        <a key={entry.title} href="#" onClick={() => chrome.tabs.create({ active: true, url: encodeURI(`${entry.project}/wiki/${entry.title}`) })}>
+        <a key={entry.title} href="#" onClick={() => window.chrome.tabs.create({ active: true, url: encodeURI(`${entry.project}/wiki/${entry.title}`) })}>
           {entry.title}
         </a>
       ))}
