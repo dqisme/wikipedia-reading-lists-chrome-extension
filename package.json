@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "3.9.3",
     "@types/chrome": "0.0.85",
     "@types/jest": "24.0.13",
     "@types/lodash": "4.14.129",
