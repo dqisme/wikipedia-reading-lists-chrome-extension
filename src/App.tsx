@@ -1,16 +1,22 @@
-import React from 'react';
-import useAllEntries from './hooks/useAllEntries';
+import React, { useState } from 'react';
+import useEntries from './hooks/useEntries';
+import Paper from '@material-ui/core/Paper';
+import SearchIcon from '@material-ui/icons/Search';
+import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyle, { WithStyles } from '@material-ui/core/styles/withStyles';
+import grey from '@material-ui/core/colors/grey';
 
 const styles = () =>
   createStyles({
     list: {
       minWidth: 320,
+      maxHeight: 480,
+      overflowY: 'auto',
     },
     progress: {
       position: 'absolute',
@@ -18,15 +24,36 @@ const styles = () =>
       left: 0,
       right: 0,
     },
+    search: {
+      backgroundColor: grey[200],
+      color: grey[800],
+      display: 'flex',
+      alignItems: 'center',
+      padding: 4,
+      marginBottom: 4,
+    },
+    searchInput: {
+      marginLeft: 8,
+    },
   });
 
 const App: React.FC<WithStyles<typeof styles>> = (props) => {
-  const { allEntries, isFetching } = useAllEntries();
+  const [searchText, setSearchText] = useState("");
+  const { entries, isFetching } = useEntries(searchText);
   return (
     <>
       {isFetching && <LinearProgress className={props.classes.progress} />}
+      <Paper className={props.classes.search} elevation={0}>
+        <SearchIcon />
+        <InputBase
+          autoFocus
+          placeholder="Search Entry"
+          className={props.classes.searchInput}
+          onChange={event => setSearchText(event.target.value)}
+        />
+      </Paper>
       <List className={props.classes.list}>
-        {allEntries.map(entry => (
+        {entries.map(entry => (
           <ListItem key={entry.title} button onClick={() => window.chrome.tabs.create({ active: true, url: encodeURI(`${entry.project}/wiki/${entry.title}`) })}>
             <ListItemText
               primary={entry.title}

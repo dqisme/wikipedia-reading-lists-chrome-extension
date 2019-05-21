@@ -14,7 +14,7 @@ interface List {
 const getAllEntries = () => JSON.parse(localStorage.getItem('allEntries') || '[]');
 const saveAllEntries = (allEntries: Array<Entry>) => localStorage.setItem('allEntries', JSON.stringify(allEntries))
 
-const useAllEntries = () => {
+const useEntries = (filterText: String) => {
   const [allEntries, setAllEntries] = useState<Array<Entry>>(getAllEntries());
   const [isFetching, setIsFetching] = useState<Boolean>(false);
 
@@ -40,7 +40,11 @@ const useAllEntries = () => {
       .finally(() => setIsFetching(false))
   }, []);
 
-  return { allEntries, isFetching };
+  return {
+    entries: allEntries.filter(entry =>
+      entry.title.toLowerCase().includes(filterText.toLowerCase())),
+    isFetching,
+  };
 }
 
-export default useAllEntries;
+export default useEntries;
