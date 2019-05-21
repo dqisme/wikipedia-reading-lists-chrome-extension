@@ -16,7 +16,7 @@ const saveAllEntries = (allEntries: Array<Entry>) => localStorage.setItem('allEn
 
 const useEntries = (filterText: String) => {
   const [allEntries, setAllEntries] = useState<Array<Entry>>(getAllEntries());
-  const [isFetching, setIsFetching] = useState<Boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   useEffect(() => {
     setIsFetching(true);
