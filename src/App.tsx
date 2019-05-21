@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import _ from 'lodash';
 import useEntries from './hooks/useEntries';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
@@ -35,6 +37,10 @@ const styles = () =>
     searchInput: {
       marginLeft: 8,
     },
+    emptyText: {
+      color: grey[400],
+      padding: 16,
+    },
   });
 
 const App: React.FC<WithStyles<typeof styles>> = (props) => {
@@ -52,8 +58,13 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
           onChange={event => setSearchText(event.target.value)}
         />
       </Paper>
-      <List className={props.classes.list}>
-        {entries.map(entry => (
+      <List className={props.classes.list} disablePadding dense>
+        {_.isEmpty(entries) ? (
+          <Typography align="center" className={props.classes.emptyText}>
+            No Entries Here.
+          </Typography>
+        ) :
+        entries.map(entry => (
           <ListItem key={entry.title} button onClick={() => window.chrome.tabs.create({ active: true, url: encodeURI(`${entry.project}/wiki/${entry.title}`) })}>
             <ListItemText
               primary={entry.title}
