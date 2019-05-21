@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import _ from 'lodash';
 
 interface Entry {
@@ -11,11 +11,16 @@ interface List {
   id: number,
 }
 
+const getAllEntries = () => JSON.parse(localStorage.getItem('allEntries') || '[]');
+const saveAllEntries = (allEntries: Array<Entry>) => localStorage.setItem('allEntries', JSON.stringify(allEntries))
+
 const useAllEntries = () => {
-  const [allEntries, setAllEntries] = useState<Array<Entry>>([]);
+  const [allEntries, setAllEntries] = useState<Array<Entry>>(getAllEntries());
+  const [isFetching, setIsFetching] = useState<Boolean>(false);
 
   useEffect(() => {
-    fetch("https://en.wikipedia.org/api/rest_v1/data/lists/")
+    setIsFetching(true);
+    fetch('https://en.wikipedia.org/api/rest_v1/data/lists/')
       .then(response => response.json())
       .then(data => data.lists as Array<List>)
       .then(lists =>
@@ -29,10 +34,13 @@ const useAllEntries = () => {
           .uniqBy('title')
           .orderBy([entry => new Date(entry.created)], ['desc'])
           .value())
-      .then(allEntries => setAllEntries(allEntries))
+      .then(allEntries => {
+        saveAllEntries(allEntries);
+        setAllEntries(allEntries); })
+      .finally(() => setIsFetching(false))
   }, []);
 
-  return allEntries;
+  return { allEntries, isFetching };
 }
 
 export default useAllEntries;
