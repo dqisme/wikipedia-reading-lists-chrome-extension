@@ -1,6 +1,6 @@
 {
   "name": "Wikipedia Reading Lists",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "description": "Read Wikipedia articles saved from Wikipedia’s iOS and Android apps",
   "homepage_url": "https://github.com/dqisme/wikipedia-reading-lists-chrome-extension",

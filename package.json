@@ -1,6 +1,6 @@
 {
   "name": "wikipedia-reading-lists-chrome-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "3.9.3",
