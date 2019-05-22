@@ -1,5 +1,5 @@
 {
-  "name": "wikipedia-reading-list-chrome-extension",
+  "name": "wikipedia-reading-lists-chrome-extension",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
