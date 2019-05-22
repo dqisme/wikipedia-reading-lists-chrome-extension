@@ -12,7 +12,7 @@ const App: React.FC = () => {
     <>
       <NetworkIndicator isFetching={isFetching} />
       <SearchBar onChange={setSearchText} />
-      <EntryList data={entries} />
+      <EntryList data={entries} isFetching={isFetching} />
     </>
   );
 }

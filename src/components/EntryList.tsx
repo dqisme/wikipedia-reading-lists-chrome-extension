@@ -16,6 +16,7 @@ interface Entry {
 
 interface Props extends WithStyles<typeof styles> {
   data: Array<Entry>,
+  isFetching: boolean,
 }
 
 const styles = () =>
@@ -36,8 +37,8 @@ const EntryList: React.FC<Props> = props => {
     <List className={props.classes.list} disablePadding dense>
       {_.isEmpty(props.data) ? (
         <Typography align="center" className={props.classes.emptyText}>
-          No Entries Here.
-          </Typography>
+          {props.isFetching ? 'Loading...' : 'No Entries Here.'}
+        </Typography>
       ) :
         props.data.map(entry => (
           <ListItem key={entry.title} button onClick={() => window.chrome.tabs.create({ active: true, url: encodeURI(`${entry.project}/wiki/${entry.title}`) })}>
