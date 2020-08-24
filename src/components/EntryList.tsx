@@ -6,7 +6,7 @@ import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles'
 import { createStyles } from '@material-ui/core'
 import grey from '@material-ui/core/colors/grey'
 import { EntryList } from '../types'
-import EntryItem from './EntryItem'
+import FolderItem from './FolderItem'
 
 interface Props extends WithStyles<typeof styles> {
   data: Array<EntryList>,
@@ -37,12 +37,12 @@ const EntryListComponent: React.FC<Props> = props => {
       ) :
         (props.listMode ? null : (
           _.chain(props.data)
-            .flatMap(list => list.entries)
-            .uniqBy(entry => entry.title)
-            .orderBy(entry => new Date(entry.created), 'desc')
-            .map(entry => <EntryItem key={entry.id} entry={entry} />))
-            .value()
-      )}
+            .map(entryList =>
+              <FolderItem name={entryList.name} entries={entryList.entries} />
+            )
+        ).value()
+        )
+      }
     </List>
   )
 }
