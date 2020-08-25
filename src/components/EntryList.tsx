@@ -30,18 +30,20 @@ const styles = () =>
 const EntryListComponent: React.FC<Props> = props => {
   return (
     <List className={props.classes.list} disablePadding dense>
-      {_.isEmpty(props.data) ? (
-        <Typography align="center" className={props.classes.emptyText}>
-          {props.loading ? 'Loading...' : 'No Entries Here.'}
-        </Typography>
-      ) :
-        (props.listMode ? null : (
-          _.chain(props.data)
-            .map(entryList =>
-              <FolderItem name={entryList.name} entries={entryList.entries} />
-            )
-        ).value()
-        )
+      {
+        _.isEmpty(props.data) ?
+          (
+            <Typography align="center" className={props.classes.emptyText}>
+              {props.loading ? 'Loading...' : 'No Entries Here.'}
+            </Typography>
+          ) :
+          (props.listMode ? null :
+            (_.chain(props.data)
+              .map(entryList =>
+                <FolderItem key={entryList.listId} name={entryList.name} entries={entryList.entries} />
+              )
+            ).value()
+          )
       }
     </List>
   )

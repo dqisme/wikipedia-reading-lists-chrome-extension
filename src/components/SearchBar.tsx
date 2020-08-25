@@ -4,10 +4,15 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { createStyles } from '@material-ui/core';
+
+import Grid from '@material-ui/core/Grid';
 import grey from '@material-ui/core/colors/grey';
+import AddMenu from './AddMenu';
+import { EntryList } from '../types';
 
 interface Props extends WithStyles<typeof styles> {
   onChange: Function,
+  lists: Array<EntryList>
 }
 
 const styles = () =>
@@ -23,18 +28,29 @@ const styles = () =>
     searchInput: {
       marginLeft: 8,
     },
+    searchIcon: {
+      paddingLeft: 12
+    }
   });
 
 const SearchBar: React.FC<Props> = props => (
-  <Paper className={props.classes.search} elevation={0}>
-    <SearchIcon />
-    <InputBase
-      autoFocus
-      placeholder="Search Entry"
-      className={props.classes.searchInput}
-      onChange={event => props.onChange(event.target.value)}
-    />
-  </Paper>
+  <Grid container spacing={8}>
+    <Grid item xs={10}>
+      <Paper className={props.classes.search} elevation={0}>
+        <SearchIcon className={props.classes.searchIcon} />
+        <InputBase
+          autoFocus
+          placeholder="Search Entry"
+          className={props.classes.searchInput}
+          onChange={event => props.onChange(event.target.value)}
+        />
+      </Paper>
+    </Grid>
+
+    <Grid item xs={2}>
+      <AddMenu lists={props.lists} />
+    </Grid>
+  </Grid >
 );
 
 export default withStyles(styles)(SearchBar);

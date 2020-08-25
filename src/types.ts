@@ -11,9 +11,11 @@ export interface List {
 }
 
 export class EntryList {
+  listId: number
   name = ''
   entries: Array<Entry> = []
-  constructor(name: string, entries: Array<Entry>) {
+  constructor(listId: number, name: string, entries: Array<Entry>) {
+    this.listId = listId
     this.name = name
     this.entries = entries
   }

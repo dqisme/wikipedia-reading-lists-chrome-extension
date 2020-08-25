@@ -20,7 +20,7 @@ const useEntries = (filterText: String) => {
         Promise.all(lists.map(list =>
           fetch(`https://en.wikipedia.org/api/rest_v1/data/lists/${list.id}/entries/`)
             .then(response => response.json())
-            .then(data => new EntryList(list.name, data.entries)))))
+            .then(data => new EntryList(list.id, list.name, data.entries)))))
       .then(entryLists => {
         saveEntryLists(entryLists)
         setEntryLists(entryLists)
@@ -35,7 +35,7 @@ const useEntries = (filterText: String) => {
 
   return {
     entries: _.map(allEntryLists, list =>
-      new EntryList(list.name, _.filter(list.entries, shouldFiltered))),
+      new EntryList(list.listId, list.name, _.filter(list.entries, shouldFiltered))),
     isFetching,
   }
 }

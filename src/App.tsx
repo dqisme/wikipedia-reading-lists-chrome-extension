@@ -11,7 +11,7 @@ const App: React.FC = () => {
   return (
     <>
       <NetworkIndicator isFetching={isFetching} />
-      <SearchBar onChange={setSearchText} />
+      <SearchBar lists={entries} onChange={setSearchText} />
       <List data={entries} loading={isFetching} listMode={false} />
     </>
   );
