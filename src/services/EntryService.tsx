@@ -19,7 +19,7 @@ class EntryService {
    */
   private static validateOrigin = (url: URL): Promise<URL> => {
     return new Promise((resolve, reject) => {
-      if (!url.origin.includes("en.wikipedia.org")) return reject("invalid url")
+      if (!url.origin.includes("wikipedia.org") || !url.origin.includes("wikivoyage.org")) return reject("invalid url")
       resolve(url)
     })
   }
