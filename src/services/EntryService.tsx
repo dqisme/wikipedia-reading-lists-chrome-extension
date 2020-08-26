@@ -134,9 +134,8 @@ class EntryService {
   /**
    * DELETE - remove the entry from the list
    */
-  private static deleteFromList = (url: URL, origin: string, listId: number, token: string, entryId: number): Promise<boolean> => {
+  private static deleteFromList = (origin: string, listId: number, token: string, entryId: number): Promise<boolean> => {
     console.log("--- begin delete ---")
-    console.log('delete url', url)
     console.log('delete origin', origin)
     console.log('delete listId', listId)
     console.log('delete entryId', entryId)
@@ -166,15 +165,17 @@ class EntryService {
    */
   public static deleteEntryFromList = async (listId: number, entryId: number, entryName: string): Promise<string> => {
     try {
-      const [tab, urlString]: [chrome.tabs.Tab, string] = await EntryService.getTab()
-      console.log('tab', tab)
-      console.log('urlString', urlString)
+      // const [tab, urlString]: [chrome.tabs.Tab, string] = await EntryService.getTab()
+      // console.log('tab', tab)
+      // console.log('urlString', urlString)
 
-      const url: URL = new URL(urlString)
+
+      // TODO: not sure if this is the best way
+      const url: URL = new URL('https://en.wikipedia.org')
       const token: string = await EntryService.getCsrfToken(url.origin)
       console.log('token', token)
 
-      const isBodyUsed: boolean = await EntryService.deleteFromList(url, url.origin, listId, token, entryId)
+      const isBodyUsed: boolean = await EntryService.deleteFromList(url.origin, listId, token, entryId)
       if (!isBodyUsed) {
         // success if response body is not used
         console.log(`success isBodyUsed:${isBodyUsed}`)
