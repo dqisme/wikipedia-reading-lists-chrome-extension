@@ -1,23 +1,22 @@
-import React from "react";
-import Button from '@material-ui/core/Button';
+import React, { useState } from "react";
+
+import Snackbar from '@material-ui/core/Snackbar';
+import Divider from '@material-ui/core/Divider';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Typography from '@material-ui/core/Typography';
 
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles'
 import { createStyles } from '@material-ui/core'
 
-import Divider from '@material-ui/core/Divider';
-
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import { ListItem, ListItemText } from "@material-ui/core";
+
 import { EntryList } from "../types";
 
-import AddEntryService from "../services/AddEntryService"
+import EntryService from "../services/EntryService"
 
 interface Props extends WithStyles<typeof styles> {
   lists: Array<EntryList>
@@ -32,56 +31,68 @@ const styles = () =>
 
 const AddMenu: React.FC<Props> = props => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [openSnack, setOpenSnack] = useState(false);
+  const [msgSnack, setMsgSnack] = useState("")
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null)
   }
 
   return (
     <div>
-      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleMenuClick}>
         <AddIcon fontSize="small" />
       </IconButton>
       <Menu
-        id="simple-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={handleMenuClose}
       >
         <Typography variant="caption" gutterBottom className={props.classes.captionNote}>
           Add to reading list
         </Typography>
         <Divider light />
 
-        {// TODO: implement create new list (if possible considering API might be broken)
-        }
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
             <CreateNewFolderIcon fontSize="small" />
           </ListItemIcon>
-          <Typography variant="inherit">Create new</Typography>
+          <Typography variant="body2">NOT WORKING</Typography>
         </MenuItem>
 
         {
-          // TODO: implement adding entry to this list - call with listId
           props.lists.map(list =>
             <MenuItem key={list.listId} onClick={
-              () => {
-                console.log(`Adding to ${list.listId}`)
-                AddEntryService.addEntryToList(list.listId)
+              async (event) => {
+                event.preventDefault()
+                event.stopPropagation()
+                console.log(`--- Adding to ${list.listId} ---`)
+                const msg: string = await EntryService.addEntryToList(list.listId, list.name)
+                setOpenSnack(true)
+                setMsgSnack(msg)
               }
             }
             >
-              {list.name}
+              <Typography variant="body2">{list.name}</Typography>
             </MenuItem>
           )
         }
       </Menu >
+
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={2000}
+        onClose={() => {
+          setOpenSnack(false)
+          setMsgSnack("")
+        }}
+        message={msgSnack}
+      />
     </div >
   )
 }

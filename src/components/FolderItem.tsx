@@ -15,6 +15,7 @@ import { Entry } from '../types'
 import EntryItem from "./EntryItem";
 
 interface Props {
+  listId: number
   name: string,
   entries: Array<Entry>
 }
@@ -44,7 +45,7 @@ const FolderItem: React.FC<Props> = props => {
           (_.chain(props.entries)
             .uniqBy(entry => entry.title)
             .orderBy(entry => new Date(entry.created), 'desc')
-            .map(entry => <EntryItem key={entry.id} entry={entry} />)
+            .map(entry => <EntryItem key={entry.id} entry={entry} listId={props.listId} />)
           ).value()
         }
       </Collapse>

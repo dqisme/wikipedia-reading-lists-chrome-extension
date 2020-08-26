@@ -1,10 +1,13 @@
 import React from 'react'
 import _ from 'lodash'
+
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles'
 import { createStyles } from '@material-ui/core'
+
 import grey from '@material-ui/core/colors/grey'
+
 import { EntryList } from '../types'
 import FolderItem from './FolderItem'
 
@@ -40,7 +43,12 @@ const EntryListComponent: React.FC<Props> = props => {
           (props.listMode ? null :
             (_.chain(props.data)
               .map(entryList =>
-                <FolderItem key={entryList.listId} name={entryList.name} entries={entryList.entries} />
+                <FolderItem
+                  key={entryList.listId}
+                  name={entryList.name}
+                  entries={entryList.entries}
+                  listId={entryList.listId}
+                />
               )
             ).value()
           )
