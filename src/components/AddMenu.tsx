@@ -18,6 +18,8 @@ import { EntryList } from "../types";
 
 import EntryService from "../services/EntryService"
 
+import AddFolderDialog from "./AddFolderDialog"
+
 interface Props extends WithStyles<typeof styles> {
   lists: Array<EntryList>
 }
@@ -30,7 +32,7 @@ const styles = () =>
   })
 
 const AddMenu: React.FC<Props> = props => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openSnack, setOpenSnack] = useState(false);
   const [msgSnack, setMsgSnack] = useState("")
 
@@ -58,12 +60,7 @@ const AddMenu: React.FC<Props> = props => {
         </Typography>
         <Divider light />
 
-        <MenuItem onClick={handleMenuClose}>
-          <ListItemIcon>
-            <CreateNewFolderIcon fontSize="small" />
-          </ListItemIcon>
-          <Typography variant="body2">NOT WORKING</Typography>
-        </MenuItem>
+        <AddFolderDialog />
 
         {
           props.lists.map(list =>

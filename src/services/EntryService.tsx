@@ -191,6 +191,60 @@ class EntryService {
       return Promise.resolve(`❌Failed! Unexpected error when deleting`)
     }
   }
+
+  private static postNewList = (origin: string, name: string, token: string): Promise<number | undefined> => {
+    console.log("--- begin post ---")
+    console.log('post origin', origin)
+    console.log('post name', name)
+    console.log('post token', token)
+
+    const urlString = `${origin}/api/rest_v1/data/lists/?csrf_token=${encodeURIComponent(token)}`
+    const details: RequestInit = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ name: name, description: "" })
+    }
+    console.log('post urlString', urlString)
+    console.log('post details', details)
+
+    return fetch(urlString, details)
+      .then(res => {
+        console.log('post response', res)
+        return res.json()
+      }
+      )
+      .then(body => {
+        console.log('post response body', body)
+        return body.id
+      }
+      )
+  }
+
+  public static addNewList = async (name: string): Promise<string> => {
+
+    try {
+      // TODO: not sure if this is the best way
+      const url: URL = new URL('https://en.wikipedia.org')
+      const token: string = await EntryService.getCsrfToken(url.origin)
+
+      const listId: number | undefined = await EntryService.postNewList(url.origin, name, token)
+      console.log('listId', listId)
+      if (listId) {
+        // success if there is an id
+        console.log(`success id:${listId}`)
+        return Promise.resolve(`✅Created ${name}!`)
+      } else {
+        // failed
+        console.log(`failed id:${listId}`)
+        return Promise.resolve(`❌Failed! Tried to ${name}!`)
+      }
+    } catch (err) {
+      // unexpected error from Promise above
+      console.error(err)
+      return Promise.resolve(`❌Failed! Unexpected error when adding`)
+    }
+  }
 }
 
 export default EntryService
