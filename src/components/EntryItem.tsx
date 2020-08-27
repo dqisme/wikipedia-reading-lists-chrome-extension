@@ -22,6 +22,7 @@ interface Props {
 
 const EntryItem: React.FC<Props> = props => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
   const [openSnack, setOpenSnack] = useState(false);
   const [msgSnack, setMsgSnack] = useState("")
 

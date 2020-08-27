@@ -84,13 +84,11 @@ class EntryService {
       .then(res => {
         console.log('post response', res)
         return res.json()
-      }
-      )
+      })
       .then(body => {
         console.log('post response body', body)
         return body.id
-      }
-      )
+      })
   }
 
   /**
@@ -192,6 +190,9 @@ class EntryService {
     }
   }
 
+  /**
+   * POST - add a new list
+   */
   private static postNewList = (origin: string, name: string, token: string): Promise<number | undefined> => {
     console.log("--- begin post ---")
     console.log('post origin', origin)
@@ -212,17 +213,18 @@ class EntryService {
       .then(res => {
         console.log('post response', res)
         return res.json()
-      }
-      )
+      })
       .then(body => {
         console.log('post response body', body)
         return body.id
-      }
-      )
+      })
   }
 
+  /**
+   * Add a new list
+   * @param name: string - list name
+   */
   public static addNewList = async (name: string): Promise<string> => {
-
     try {
       // TODO: not sure if this is the best way
       const url: URL = new URL('https://en.wikipedia.org')
@@ -241,6 +243,64 @@ class EntryService {
       }
     } catch (err) {
       // unexpected error from Promise above
+      console.error(err)
+      return Promise.resolve(`❌Failed! Unexpected error when adding`)
+    }
+  }
+
+  /**
+   * DELETE - delete a list
+   */
+  private static deleteList = (origin: string, listId: number, token: string): Promise<boolean> => {
+    console.log("--- begin delete ---")
+    console.log('delete origin', origin)
+    console.log('delete listId', listId)
+    console.log('delete token', token)
+
+    const urlString = `${origin}/api/rest_v1/data/lists/${listId}?csrf_token=${encodeURIComponent(token)}`
+    const details: RequestInit = {
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+    }
+    console.log('post urlString', urlString)
+    console.log('post details', details)
+
+    return fetch(urlString, details)
+      .then(res => {
+        console.log('delete response', res)
+        console.log('delete isBodyUse?', res.bodyUsed)
+
+        // can not delete default list
+        if (res.status !== 200) return true
+
+        // success if false (no body is used)
+        return res.bodyUsed
+      })
+  }
+
+  /**
+   * Delete a list
+   * @param listId: number - list id
+   * @param listName: string - list name
+   */
+  public static deleteThisList = async (listId: number, listName: string) => {
+    try {
+      // TODO: not sure if this is the best way
+      const url: URL = new URL('https://en.wikipedia.org')
+      const token: string = await EntryService.getCsrfToken(url.origin)
+
+      const isBodyUsed: boolean = await EntryService.deleteList(url.origin, listId, token)
+      if (!isBodyUsed) {
+        // success if response body is not used
+        console.log(`success isBodyUsed:${isBodyUsed}`)
+        return Promise.resolve(`✅Deleted list ${listName}!`)
+      } else {
+        // failed
+        console.log(`failed isBodyUsed:${isBodyUsed}`)
+        return Promise.resolve(`❌Failed! Tried to delete list ${listName}!`)
+      }
+    } catch (err) {
       console.error(err)
       return Promise.resolve(`❌Failed! Unexpected error when adding`)
     }
