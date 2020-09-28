@@ -17,7 +17,7 @@ interface Props extends WithStyles<typeof styles> {
 const styles = () =>
   createStyles({
     list: {
-      minWidth: 320,
+      width: 320,
       maxHeight: 480,
       overflowY: 'auto',
     },
